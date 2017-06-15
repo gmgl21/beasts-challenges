@@ -1,0 +1,64 @@
+<script src="simpletest.js"></script>
+<script src="isPrototypeOf.js"></script>
+<script>
+tests({
+
+  'It should return true if the object exists in another object prototype chain': function() {
+    var canine = {
+      bark: function() {
+      console.log('bark');
+      }
+    };
+
+    var dog = Object.create(canine);
+    dog.fetch = function() {
+    console.log('fetch');
+    };
+
+    var myDog = Object.create(dog);
+
+    eq(isPrototypeOf(dog, myDog), true);
+    eq(isPrototypeOf(canine, myDog), true);
+    eq(isPrototypeOf(Object.prototype, myDog), true);
+  },
+  'It should return true if the object exists in the constructor function prototype chain': function() {
+    function Foo() {}
+    function Bar() {}
+    function Baz() {}
+
+    Bar.prototype = Object.create(Foo.prototype);
+    Baz.prototype = Object.create(Bar.prototype);
+
+    var baz = new Baz();
+
+    eq(isPrototypeOf(Baz.prototype,baz), true);
+    eq(isPrototypeOf(Bar.prototype,baz), true);
+    eq(isPrototypeOf(Foo.prototype,baz), true);
+    eq(isPrototypeOf(Object.prototype,baz), true);
+  },
+  'It should return false if the object has no prototype': function() {
+    var canine = {
+    bark: function() {
+      console.log('bark');
+      }
+    };
+
+    var dog = Object.create(canine);
+    dog.fetch = function() {
+    console.log('fetch');
+    };
+
+    var empty = Object.create(null);
+
+    eq(isPrototypeOf(dog, empty), false);
+    eq(isPrototypeOf(canine, empty), false);
+  },
+  'It should throw TypeError if the prototypeObj is undefined or null': function(){
+    try {
+      isPrototypeOf(undefined, {});
+    } catch (e) {
+      eq(e instanceof TypeError, true);
+    }
+  }
+});
+</script>
