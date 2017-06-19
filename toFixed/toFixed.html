@@ -1,0 +1,31 @@
+<script src="simpletest.js"></script>
+<script src="toFixed.js"></script>
+<script>
+  tests({
+    'It should round 0.615 to 0.62':function() {
+      eq(toFixed(0.615, 2), '0.62');
+    },
+    'It should round 10.235 to 10.24':function() {
+      eq(toFixed(10.235, 2), '10.24');
+    },
+    'It should round 1.005 to 1.01':function() {
+      eq(toFixed(1.005, 2), '1.01');
+    },
+    'It should pad zeros after array.length':function() {
+      eq(toFixed(9.5, 5), '9.50000');
+      eq(toFixed(1234.567890123456789, 10), '1234.5678901235');
+    },
+    'If the value is less than 1 it should add zero before the decimal first, if there isn\t a zero already. /n Then move the decimal to the position of the precision':function() {
+      eq(moveDecimal(.1245, 3), '0124.5');
+    },
+    'It should move the decimal to the position of the precision':function() {
+      eq(moveDecimal(0.615, 2), '061.5');
+      eq(moveDecimal(10.235, 2), '1023.5');
+      eq(moveDecimal(1.005, 1), '10.05');
+    },
+    'It should pad zeros after array.length and move the decimal to the position of the precision':function() {
+      eq(moveDecimal(9.5, 5), '950000.');
+      eq(moveDecimal(1234.56789, 15), '1234567890000000000.');
+    }
+  });
+</script>
